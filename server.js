@@ -1,14 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const sgMail = require('@sendgrid/mail');
+const path = require('path');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// SendGrid API Key
-sgMail.setApiKey('YOUR_SENDGRID_API_KEY');
+// SendGrid API Key from environment variable
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Welcome email endpoint
 app.post('/sendWelcomeEmail', (req, res) => {
@@ -16,7 +19,7 @@ app.post('/sendWelcomeEmail', (req, res) => {
 
     const msg = {
         to: email,
-        from: 'your-email@example.com',
+        from: 'sperandeomichael@gmail.com',
         subject: 'Welcome to DEV@Deakin',
         text: 'Thank you for subscribing to DEV@Deakin!',
         html: '<strong>Thank you for subscribing to DEV@Deakin!</strong>',
@@ -36,6 +39,3 @@ app.post('/sendWelcomeEmail', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-
-
-
